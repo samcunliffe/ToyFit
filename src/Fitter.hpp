@@ -11,21 +11,19 @@ class Fitter
 {
  public:
   Fitter(Model* m, /*const*/ RooDataSet* d): 
-      _model(m), _data(d), _rfr(NULL), // _nll(NULL), 
-        _nll(_model->pdf()->createNLL(*_data)),
-      _migrad(0), _hesse(0), _minos(0) { }
+      _model(m), _data(d), _rfr(NULL), 
+      _nll(_model->pdf()->createNLL(*_data)),
+      _migrad(-1), _hesse(-1), _minos(-1) { }
   ~Fitter()
   {
     delete _rfr;
     delete _nll;
   }
   void fit();
-  void plotNLLScan(RooRealVar*);
-  void plotNLLProfile()
-  {
-    // Implement me
-    return;
-  }
+  void plotNLLScan(RooRealVar* x);
+  void plotNLLScan(RooRealVar* x, RooRealVar* y);
+  void plotNLLProfile(RooRealVar* x);
+  void plotNLLProfile(RooRealVar* x, RooRealVar* y);
  private:
   Model* _model;
   RooFitResult* _rfr;

@@ -1,4 +1,4 @@
-//#include <iostream>
+#include <iostream>
 #include <TCanvas.h>
 #include <RooPlot.h>
 
@@ -7,6 +7,8 @@
 
 #include "GaussianModel1D.hpp"
 #include "Fitter.hpp"
+
+using std::cout; using std::endl;
 
 class Plotter1D
 {
@@ -38,6 +40,10 @@ int main(int argc, char *argv[])
   f.fit();
   f.plotNLLScan(model.getPar("mean")); // make a quick NLL plot
   f.plotNLLScan(model.getPar("sigma"));
+  f.plotNLLScan(model.getPar("mean"), model.getPar("sigma"));
+
+  cout << "Now try making a profile" << endl;
+  f.plotNLLProfile(model.getPar("sigma"));
 
   // make a plot of the PDF and data
   Plotter1D p(x);
