@@ -1,26 +1,12 @@
-
-#include <vector>
-#include <iostream>
-
+//#include <iostream>
 #include <TCanvas.h>
-#include <TString.h>
-
-#include <RooFitResult.h>
-#include <RooFit.h>
-#include <RooGaussian.h>
 #include <RooPlot.h>
-#include <RooMinuit.h>
+
 #include <RooRealVar.h>
-#include <RooArgSet.h>
 #include <RooDataSet.h>
 
-const bool DEBUG = 1;
-
-//#include "Model.hpp"
 #include "GaussianModel1D.hpp"
 #include "Fitter.hpp"
-
-
 
 class Plotter1D
 {
@@ -49,7 +35,6 @@ int main(int argc, char *argv[])
 
   // minimise the likelihood
   Fitter f(&model, data);
-  std::cout << "pointer to the model pdf " << model.pdf() << std::endl;
   f.fit();
   f.plotNLLScan(model.getPar("mean")); // make a quick NLL plot
   f.plotNLLScan(model.getPar("sigma"));

@@ -25,8 +25,9 @@ class Model
 
 //-----------------------------------------------------
 // implementation of a couple of methods
+// inline keyword to relax the one definition rule
 
-void Model::print()
+inline void Model::print()
 { 
   std::cout << _name << " ";
   if (this->pdf())
@@ -35,7 +36,8 @@ void Model::print()
     std::cout << "RooAbsPdf pointer is null";
   std::cout << std::endl;
 }
-RooRealVar* Model::getPar(TString name)
+
+inline RooRealVar* Model::getPar(TString name)
 {
   for (auto p: _pars)
     if (name == TString(p->GetName()))

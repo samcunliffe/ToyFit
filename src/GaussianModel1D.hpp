@@ -32,7 +32,7 @@ class GaussianModel1D : public Model
   RooGaussian* _pdf;
 };
 
-void GaussianModel1D::build()
+inline void GaussianModel1D::build()
 {
   RooRealVar* m = new RooRealVar("mean", "#bar{x}", 0, -1, 1);
   RooRealVar* s = new RooRealVar("sigma", "#sigma", 0.2, 0.1, 1.0);
