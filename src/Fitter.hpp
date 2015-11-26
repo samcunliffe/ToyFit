@@ -20,6 +20,7 @@ class Fitter
     delete _nll;
   }
   void fit();
+  void plot(const TString& name, const RooRealVar* x);
   void plotNLLScan(RooRealVar* x);
   void plotNLLScan(RooRealVar* x, RooRealVar* y);
   void plotNLLProfile(RooRealVar* x);

@@ -5,49 +5,43 @@
 #include <RooRealVar.h>
 #include <RooDataSet.h>
 
-#include "GaussianModel1D.hpp"
+#include "InvariantMassModel.hpp"
 #include "Fitter.hpp"
 
 using std::cout; using std::endl;
-
-class Plotter1D
-{
- public:
-  Plotter1D(RooRealVar &x): _x(x) {}
-  void plot(GaussianModel1D& model, RooDataSet* data)
-  {
-    RooPlot* rp = _x.frame();
-    data->plotOn(rp);
-    model.pdf()->plotOn(rp);
-    TCanvas canvas;
-    rp->Draw();
-    canvas.SaveAs("plot.pdf");
-    return;
-  }
- private:
-  RooRealVar& _x;
-};
+const bool scans = false;
+const bool profiles = false;
 
 int main(int argc, char *argv[])
 {
   // setup model
-  RooRealVar x("x", "x", -1, 1);
-  GaussianModel1D model("simple", x);
+  RooRealVar x("x", "m", 4800, 5700);
+  InvariantMassModel model("simple", x);
   RooDataSet *data = model.generate();
 
   // minimise the likelihood
   Fitter f(&model, data);
   f.fit();
-  f.plotNLLScan(model.getPar("mean")); // make a quick NLL plot
-  f.plotNLLScan(model.getPar("sigma"));
-  f.plotNLLScan(model.getPar("mean"), model.getPar("sigma"));
 
-  cout << "Now try making a profile" << endl;
-  f.plotNLLProfile(model.getPar("sigma"));
+  // plot things
+  f.plot("after_fit", &x);
 
-  // make a plot of the PDF and data
-  Plotter1D p(x);
-  p.plot(model, data);
-
+  if (scans) {
+    cout << "Now try making scans" << endl;
+    f.plotNLLScan(model.getPar("mean")); // make a quick NLL plot
+    f.plotNLLScan(model.getPar("sigma"));
+    f.plotNLLScan(model.getPar("lambda"));
+    f.plotNLLScan(model.getPar("f_sig"));
+    f.plotNLLScan(model.getPar("mean"), model.getPar("sigma"));
+  }
+  if (profiles) {
+    cout << "Now try making profiles" << endl;
+    f.plotNLLProfile(model.getPar("sigma")); // proper NLL scan
+    f.plotNLLProfile(model.getPar("mean"));
+    f.plotNLLProfile(model.getPar("lambda"));
+    f.plotNLLProfile(model.getPar("f_sig"));
+  }
+  // test a 2D profile
+  f.plotNLLProfile(model.getPar("mean"), model.getPar("sigma"));
   return 0;
 }
